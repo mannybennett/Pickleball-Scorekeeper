@@ -13,29 +13,60 @@ main {
   align-items: center;
 }
 
-#court {
+#container {
   aspect-ratio: 5 / 11;
   width: 100%;
   max-width: 300px;
   max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+#court {
+  width: 100%;
+  height: 100%;
   border: 5px solid white;
   background-color: rgb(67, 179, 67);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+#top, #bottom {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 #top {
-  width: 100%;
-  height: 50%;
   border-bottom: 2.5px solid white;
-  display: flex;
-  flex-direction: column;
 }
 
 #bottom {
-  width: 100%;
-  height: 50%;
   border-top: 2.5px solid white;
-  display: flex;
-  flex-direction: column;
+}
+
+/* Overlay effect for both halves */
+#top::after, #bottom::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Hover state */
+#top:hover::after,
+#bottom:hover::after {
+  opacity: 1;
 }
 
 #kitchen1 {
@@ -43,6 +74,9 @@ main {
   flex: 7;
   background-color: rgb(68, 68, 240);
   border-top: 5px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #kitchen2 {
@@ -50,6 +84,9 @@ main {
   flex: 7;
   background-color: rgb(68, 68, 240);
   border-bottom: 5px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .services {
@@ -63,10 +100,47 @@ main {
   width: 50%;
   height: 100%;
   border-right: 2.5px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .service2 {
   width: 50%;
   height: 100%;
   border-left: 2.5px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+footer {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  gap: 5px;
+}
+
+#score {
+  background-color: white;
+  border-radius: 5px;
+  color: black;
+  text-align: center;
+  font-size: 2vw;
+  flex: 2;
+}
+
+button {
+  all: unset;
+  background-color: white;
+  text-align: center;
+  color: black;
+  border-radius: 5px;
+  flex: 1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: lightgray;
 }

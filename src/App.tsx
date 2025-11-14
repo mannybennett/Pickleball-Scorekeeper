@@ -2,13 +2,13 @@ import { useState } from 'react';
 import './App.css';
 
 function App() {
-const [player1, setPlayer1] = useState<string>('Player 1');
-const [player2, setPlayer2] = useState<string>('Player 2');
-const [player3, setPlayer3] = useState<string>('Player 3');
-const [player4, setPlayer4] = useState<string>('Player 4');
+const [player1, _setPlayer1] = useState<string>('Player 1');
+const [player2, _setPlayer2] = useState<string>('Player 2');
+const [player3, _setPlayer3] = useState<string>('Player 3');
+const [player4, _setPlayer4] = useState<string>('Player 4');
 const [score, setScore] = useState<number[]>([0, 0, 2]);
 const [turn, setTurn] = useState<number>(1);
-const [pointWinner, setPointWinner] = useState<number>(1);
+const [_pointWinner, setPointWinner] = useState<number>(1);
 
 const handleServer = (): void => {
   console.log('Switch server number')

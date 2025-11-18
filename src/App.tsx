@@ -2,15 +2,16 @@ import { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-const [player1, _setPlayer1] = useState<string>('Player 1');
-const [player2, _setPlayer2] = useState<string>('Player 2');
-const [player3, _setPlayer3] = useState<string>('Player 3');
-const [player4, _setPlayer4] = useState<string>('Player 4');
+const [player1, setPlayer1] = useState<string>('Player 1');
+const [player2, setPlayer2] = useState<string>('Player 2');
+const [player3, setPlayer3] = useState<string>('Player 3');
+const [player4, setPlayer4] = useState<string>('Player 4');
 const [score, setScore] = useState<number[]>([0, 0, 2]); // [Team1, Team2, Server]
 const [turn, setTurn] = useState<number>(1); // 1 = Team1, 2 = Team2
 const [_pointWinner, setPointWinner] = useState<number>(1); // 1 = Team1, 2 = Team2
 const [gameWinner, setGameWinner] = useState<string>('Team');
 const [winnerDisplay, setWinnerDisplay] = useState<string>('none');
+const [playersDisplay, setPlayersDisplay] = useState<string>('none');
 const [courtDisplay, setCourtDisplay] = useState<string>('flex');
 
 useEffect(() => {
@@ -81,17 +82,77 @@ const handleReset = (): void => {
   setPointWinner(1);
   setTurn(1);
   setWinnerDisplay('none');
+  setPlayersDisplay('none');
   setCourtDisplay('flex');
   setGameWinner('Team');
+};
+
+const handlePlayers = (): void => {
+  setPlayersDisplay('flex');
+  setCourtDisplay('none');
+  setWinnerDisplay('none');
+};
+
+const handlePlayerNames = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const { id, value } = e.target;
+  switch (id) {
+    case 'player1':
+      setPlayer1(value);
+      break;
+    case 'player2':
+      setPlayer2(value);
+      break;
+    case 'player3':
+      setPlayer3(value);
+      break;
+    case 'player4':
+      setPlayer4(value);
+      break;
+    default:
+      break;
+  }
+};
+
+const handleDone = (): void => {
+  setPlayersDisplay('none');
+  if (gameWinner === 'Team') {
+    setCourtDisplay('flex');
+    setWinnerDisplay('none');
+  } else {
+    setCourtDisplay('none');
+    setWinnerDisplay('flex');
+  };
 };
 
   return (
     <main>
       <div id='container'>
+        {/********************* PLAYERS *********************/}
+        <div id='players' style={{ display: playersDisplay }}>
+          <div className='input-container'>
+            <p>Player 1:</p>
+            <input id='player1' type="text" value={player1} onChange={(e) => handlePlayerNames(e)}/>
+          </div>
+          <div className='input-container'>
+            <p>Player 2:</p>
+            <input id='player2' type="text" value={player2} onChange={(e) => handlePlayerNames(e)}/>
+          </div>
+          <div className='input-container'>
+            <p>Player 3:</p>
+            <input id='player3' type="text" value={player3} onChange={(e) => handlePlayerNames(e)}/>
+          </div>
+          <div className='input-container'>
+            <p>Player 4:</p>
+            <input id='player4' type="text" value={player4} onChange={(e) => handlePlayerNames(e)}/>
+          </div>
+          <button id='done' onClick={handleDone}>Done</button>
+        </div>
+        {/********************* WINNER *********************/}
         <div id='winner' style={{ display: winnerDisplay }}>
           <h2>WINNER</h2>
           <h1>{gameWinner}</h1>
         </div>
+        {/********************* COURT *********************/}
         <div id='court' style={{ display: courtDisplay }}>
           <section id='top' onClick={handleTeam2Score}>
             <div className='services'>
@@ -116,6 +177,7 @@ const handleReset = (): void => {
             </div>
           </section>
         </div>
+        {/********************* SCORE/BUTTONS *********************/}
         <footer>
           <div id='score'>
             {`
@@ -124,8 +186,8 @@ const handleReset = (): void => {
               ${score[2]}
             `}
           </div>
-          <button id='reset' onClick={handleReset}>Reset</button>
-          <button id='players'>Players</button>
+          <button onClick={handleReset}>Reset</button>
+          <button onClick={handlePlayers}>Players</button>
         </footer>
       </div>
     </main>

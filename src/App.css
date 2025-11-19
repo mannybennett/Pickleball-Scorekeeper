@@ -50,17 +50,25 @@ main {
 .input-container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 3px;
 }
 
 p {
   color: black;
   font-size: 1rem;
   font-weight: 500;
+  flex: 1;
 }
 
-/* input {
+input {
   all: unset;
-} */
+  border: 1px solid black;
+  border-radius: 5px;
+  color: black;
+  padding: 1px 3px;
+  flex: 3;
+}
 
 #done {
   flex: none;

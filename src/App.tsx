@@ -15,13 +15,18 @@ const [playersDisplay, setPlayersDisplay] = useState<string>('none');
 const [courtDisplay, setCourtDisplay] = useState<string>('flex');
 
 useEffect(() => {
-  if (score[0] === 11 || score[1] === 11) {
-    handleGameWinner();
-  };
+  if (score[0] >= 10 && score[1] >= 10) {
+    if (score[0] - score[1] === 2 || score[0] - score[1] === -2) {
+      handleGameWinner();
+      return;
+    }
+  } else if (score[0] === 11 || score[1] === 11) {
+      handleGameWinner();
+  }
 }, [score]);
 
 const handleGameWinner = (): void => {
-  if (score[0] === 11) {
+  if (score[0] > score[1]) {
     setGameWinner('Team 1');
   } else {
     setGameWinner('Team 2');
@@ -127,23 +132,24 @@ const handleDone = (): void => {
   return (
     <main>
       <div id='container'>
+        <div id='instruction'>Tap on the rally winner</div>
         {/********************* PLAYERS *********************/}
         <div id='players' style={{ display: playersDisplay }}>
           <div className='input-container'>
             <p>Player 1:</p>
-            <input id='player1' type="text" value={player1} onChange={(e) => handlePlayerNames(e)}/>
+            <input id='player1' type="text" maxLength={15} value={player1} onChange={(e) => handlePlayerNames(e)}/>
           </div>
           <div className='input-container'>
             <p>Player 2:</p>
-            <input id='player2' type="text" value={player2} onChange={(e) => handlePlayerNames(e)}/>
+            <input id='player2' type="text" maxLength={15} value={player2} onChange={(e) => handlePlayerNames(e)}/>
           </div>
           <div className='input-container'>
             <p>Player 3:</p>
-            <input id='player3' type="text" value={player3} onChange={(e) => handlePlayerNames(e)}/>
+            <input id='player3' type="text" maxLength={15} value={player3} onChange={(e) => handlePlayerNames(e)}/>
           </div>
           <div className='input-container'>
             <p>Player 4:</p>
-            <input id='player4' type="text" value={player4} onChange={(e) => handlePlayerNames(e)}/>
+            <input id='player4' type="text" maxLength={15} value={player4} onChange={(e) => handlePlayerNames(e)}/>
           </div>
           <button id='done' onClick={handleDone}>Done</button>
         </div>

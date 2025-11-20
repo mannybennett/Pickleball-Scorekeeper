@@ -2,13 +2,10 @@ import { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-const [player1, setPlayer1] = useState<string>('Player 1');
-const [player2, setPlayer2] = useState<string>('Player 2');
-const [player3, setPlayer3] = useState<string>('Player 3');
-const [player4, setPlayer4] = useState<string>('Player 4');
+  
+const [players, setPlayers] = useState<string[]>(['Player 1','Player 2','Player 3','Player 4']);
 const [score, setScore] = useState<number[]>([0, 0, 2]); // [Team1, Team2, Server]
 const [turn, setTurn] = useState<number>(1); // 1 = Team1, 2 = Team2
-const [_pointWinner, setPointWinner] = useState<number>(1); // 1 = Team1, 2 = Team2
 const [gameWinner, setGameWinner] = useState<string>('Team');
 const [winnerDisplay, setWinnerDisplay] = useState<string>('none');
 const [playersDisplay, setPlayersDisplay] = useState<string>('none');
@@ -45,9 +42,8 @@ const handleServer = (): void => {
 };
 
 const handleTeam1Score = (): void => {
-  const newPointWinner = 1;
-  setPointWinner(newPointWinner);
-  if (turn === newPointWinner) {
+  const pointWinner = 1;
+  if (turn === pointWinner) {
     console.log('Team 1 earned a point')
     setScore(prev => {
       const newScore = [...prev];
@@ -64,9 +60,8 @@ const handleTeam1Score = (): void => {
 };
 
 const handleTeam2Score = (): void => {
-  const newPointWinner = 2;
-  setPointWinner(newPointWinner);
-  if (turn === newPointWinner) {
+  const pointWinner = 2;
+  if (turn === pointWinner) {
     console.log('Team 2 earned a point');
     setScore(prev => {
       const newScore = [...prev];
@@ -84,7 +79,6 @@ const handleTeam2Score = (): void => {
 
 const handleReset = (): void => {
   setScore([0, 0, 2]);
-  setPointWinner(1);
   setTurn(1);
   setWinnerDisplay('none');
   setPlayersDisplay('none');
@@ -98,24 +92,10 @@ const handlePlayers = (): void => {
   setWinnerDisplay('none');
 };
 
-const handlePlayerNames = (e: React.ChangeEvent<HTMLInputElement>): void => {
-  const { id, value } = e.target;
-  switch (id) {
-    case 'player1':
-      setPlayer1(value);
-      break;
-    case 'player2':
-      setPlayer2(value);
-      break;
-    case 'player3':
-      setPlayer3(value);
-      break;
-    case 'player4':
-      setPlayer4(value);
-      break;
-    default:
-      break;
-  }
+const handlePlayerNames = (e: React.ChangeEvent<HTMLInputElement>, index: number): void => {
+  const newPlayers = [...players];
+  newPlayers[index] = e.target.value;
+  setPlayers(newPlayers);
 };
 
 const handleDone = (): void => {
@@ -135,22 +115,14 @@ const handleDone = (): void => {
         <div id='instruction'>Tap on the rally winner</div>
         {/********************* PLAYERS *********************/}
         <div id='players' style={{ display: playersDisplay }}>
-          <div className='input-container'>
-            <p>Player 1:</p>
-            <input id='player1' type="text" maxLength={15} value={player1} onChange={(e) => handlePlayerNames(e)}/>
-          </div>
-          <div className='input-container'>
-            <p>Player 2:</p>
-            <input id='player2' type="text" maxLength={15} value={player2} onChange={(e) => handlePlayerNames(e)}/>
-          </div>
-          <div className='input-container'>
-            <p>Player 3:</p>
-            <input id='player3' type="text" maxLength={15} value={player3} onChange={(e) => handlePlayerNames(e)}/>
-          </div>
-          <div className='input-container'>
-            <p>Player 4:</p>
-            <input id='player4' type="text" maxLength={15} value={player4} onChange={(e) => handlePlayerNames(e)}/>
-          </div>
+          {
+            players.map((player, i) => (
+              <div className='input-container' key={i}>
+                <p>{`Player ${i+1}:`}</p>
+                <input id={`player${i}`} type="text" maxLength={15} value={player} onChange={(e) => handlePlayerNames(e, i)}/>
+              </div>
+            ))
+          }
           <button id='done' onClick={handleDone}>Done</button>
         </div>
         {/********************* WINNER *********************/}
@@ -163,10 +135,10 @@ const handleDone = (): void => {
           <section id='top' onClick={handleTeam2Score}>
             <div className='services'>
               <div className='service1'>
-                {`${score[1] % 2 === 0 ? player4 : player3}`}
+                {`${score[1] % 2 === 0 ? players[3] : players[2]}`}
               </div>
               <div className='service2'>
-                {`${score[1] % 2 === 0 ? player3 : player4}`}
+                {`${score[1] % 2 === 0 ? players[2] : players[3]}`}
               </div>
             </div>
             <div id='kitchen1'>Team 2</div>
@@ -175,10 +147,10 @@ const handleDone = (): void => {
             <div id='kitchen2'>Team 1</div>
             <div className='services'>
               <div className='service1'>
-                {`${score[0] % 2 === 0 ? player2 : player1}`}
+                {`${score[0] % 2 === 0 ? players[1] : players[0]}`}
               </div>
               <div className='service2'>
-                {`${score[0] % 2 === 0 ? player1 : player2}`}
+                {`${score[0] % 2 === 0 ? players[0] : players[1]}`}
               </div>
             </div>
           </section>

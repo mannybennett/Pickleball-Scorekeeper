@@ -1,17 +1,22 @@
 import { useState, useEffect } from 'react';
+import UndoIcon from "./UndoIcon"
 import './App.css';
 
 function App() {
   
 const [players, setPlayers] = useState<string[]>(['Player 1','Player 2','Player 3','Player 4']);
 const [score, setScore] = useState<number[]>([0, 0, 2]); // [Team1, Team2, Server]
+const [prevScore, setPrevScore] = useState<number[]>([]);
+const [undoTrue, setUndoTrue] = useState<boolean>(true);
 const [turn, setTurn] = useState<number>(1); // 1 = Team1, 2 = Team2
+const [prevTurn, setPrevTurn] = useState<number>(1);
 const [gameWinner, setGameWinner] = useState<string>('Team');
 const [winnerDisplay, setWinnerDisplay] = useState<string>('none');
 const [playersDisplay, setPlayersDisplay] = useState<string>('none');
 const [courtDisplay, setCourtDisplay] = useState<string>('flex');
 
 useEffect(() => {
+  console.log('Score:', score)
   if (score[0] >= 10 && score[1] >= 10) {
     if (score[0] - score[1] === 2 || score[0] - score[1] === -2) {
       handleGameWinner();
@@ -42,9 +47,12 @@ const handleServer = (): void => {
 };
 
 const handleTeam1Score = (): void => {
+  setPrevScore(score);
+  setPrevTurn(turn);
+  setUndoTrue(false);
   const pointWinner = 1;
   if (turn === pointWinner) {
-    console.log('Team 1 earned a point')
+    console.log('Team 1 earned a point');
     setScore(prev => {
       const newScore = [...prev];
       newScore[0] += 1;
@@ -60,6 +68,9 @@ const handleTeam1Score = (): void => {
 };
 
 const handleTeam2Score = (): void => {
+  setPrevScore(score);
+  setPrevTurn(turn);
+  setUndoTrue(false);
   const pointWinner = 2;
   if (turn === pointWinner) {
     console.log('Team 2 earned a point');
@@ -75,6 +86,15 @@ const handleTeam2Score = (): void => {
     handleServer();
     setTurn(2);
   };
+};
+
+const handleUndo = (): void => {
+  setWinnerDisplay('none');
+  setPlayersDisplay('none');
+  setCourtDisplay('flex');
+  setUndoTrue(true);
+  setScore(prevScore);
+  setTurn(prevTurn);
 };
 
 const handleReset = (): void => {
@@ -112,7 +132,12 @@ const handleDone = (): void => {
   return (
     <main>
       <div id='container'>
-        <div id='instruction'>Tap on the rally winner</div>
+        <div id='instruction-undo'>
+          <h3 id='instruction'>Tap on the rally winner</h3>
+          <button disabled={undoTrue} id='undo' onClick={handleUndo}>
+            <UndoIcon size={15} />
+          </button>
+        </div>
         {/********************* PLAYERS *********************/}
         <div id='players' style={{ display: playersDisplay }}>
           {
